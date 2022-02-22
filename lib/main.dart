@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './theme_data.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider<ThemeColorData>(
+    create: (BuildContext context) => ThemeColorData(), child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: green,
+      theme: Provider.of<ThemeColorData>(context).ThemeColor,
       home: HomePage(),
     );
   }
@@ -28,9 +30,14 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SwitchListTile(
-              title: Text("Yeşil Tema"),
-              onChanged: null,
-              value: false,
+              title:
+        Provider.of<ThemeColorData>(context).isGreen?
+          Text("Yeşil Tema"):
+        Text("Kırmızı Tema"),
+              onChanged: (_){
+                Provider.of<ThemeColorData>(context, listen: false).toggleTheme();
+              },
+              value: Provider.of<ThemeColorData>(context).isGreen,
             ),
             Card(
               child: ListTile(
